@@ -20,6 +20,7 @@
       <th><%= Spree.t(:price) %></th>
       <th><%= Spree.t(:quantity) %></th>
       <th><%= Spree.t(:total) %></th>
+      <th><%= "Remove" %></th>
     </tr>
   </thead>
   <tbody id="line_items">
@@ -30,13 +31,13 @@
     <tr class="<%= cycle('', 'alt') %>">
     <% if @wishlist.user == spree_current_user %>
       <td>
-        <p><%= link_to Spree.t(:remove_from_wishlist), wish, method: :delete, class: 'btn btn-danger' %></p>
+
         <%= form_for :order, url: populate_orders_url do |f| %>
           <%= hidden_field_tag 'variant_id', variant.id, size: 3 %>
-          <%= Spree.t(:quantity) %>
-          <%= number_field_tag 'quantity', wish.quantity, size: 3 %>
+          <%= hidden_field_tag 'quantity', wish.quantity, size: 3 %>
           <%= link_to Spree.t(:add_to_cart), '#', onclick: '$(this).parent().submit(); return false;', class: 'btn btn-success' %>
         <% end %>
+
         <% if spree_current_user.wishlists.count > 1 %>
           <%= Spree.t(:move_to_another_wishlist) %>:
           <%= form_for wish do |f| %>
@@ -51,7 +52,7 @@
         <% if variant.images.length == 0 %>
           <%= small_image(variant.product) %>
         <% else %>
-          <%= image_tag variant.images.first.attachment.url(:small) %>
+          <%= image_tag variant.images.first.url(:small).service_url rescue binding.pry %>
         <% end %>
       </td>
       <td>
@@ -76,6 +77,9 @@
       </td>
       <td>
         <%= wish.display_total %>
+      </td>
+      <td>
+        <p><%= link_to fa_icon("times"), wish, method: :delete, class: 'btn btn-danger' %></p>
       </td>
     </tr>
     <% end %>
