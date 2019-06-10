@@ -52,7 +52,7 @@
         <% if variant.images.length == 0 %>
           <%= small_image(variant.product) %>
         <% else %>
-          <%= image_tag variant.images.first.url(:small).service_url rescue binding.pry %>
+          <%= image_tag variant.images.first.url(:small).service_url %>
         <% end %>
       </td>
       <td>
